@@ -1,0 +1,32 @@
+{
+    "testTimeout": 10000,
+    "rootDir": "../../",
+    "modulePaths": [
+        "."
+    ],
+    "testEnvironment": "node",
+    "testMatch": [
+        "<rootDir>/test/e2e/**/*.e2e-spec.ts"
+    ],
+    "collectCoverage": true,
+    "coverageDirectory": "e2e-coverage",
+    "collectCoverageFrom": [
+        "./test/e2e"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 100,
+        "functions": 100,
+        "lines": 100,
+        "statements": 100
+      }
+    },
+    "moduleFileExtensions": [
+        "js", 
+        "ts", 
+        "json"
+    ],
+    "transform": {
+        "^.+\\.(t|j)s$": "ts-jest"
+    }
+}
