@@ -61,7 +61,7 @@
     "@nestjs/jwt": "^9.0.0",
     "@nestjs/mongoose": "^9.2.0",
     "@nestjs/passport": "^9.0.0",
-    "@nestjs/platform-express": "^9.1.5",
+    "@nestjs/platform-express": "^9.2.0",
     "@nestjs/schedule": "^2.1.0",
     "@nestjs/swagger": "^6.1.2",
     "@nestjs/terminus": "^9.1.2",
