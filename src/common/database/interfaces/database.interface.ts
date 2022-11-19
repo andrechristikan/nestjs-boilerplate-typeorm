@@ -1,11 +1,11 @@
-import { PopulateOptions } from 'mongoose';
 import { IPaginationOptions } from 'src/common/pagination/interfaces/pagination.interface';
+import { FindOptionsRelations } from 'typeorm';
 
 // find one
 export interface IDatabaseFindOneOptions<T = any>
     extends Pick<IPaginationOptions, 'sort'> {
     select?: Record<string, number | string>;
-    join?: boolean | PopulateOptions | PopulateOptions[];
+    join?: boolean | FindOptionsRelations<T>;
     session?: T;
     withDeleted?: boolean;
 }
@@ -21,10 +21,6 @@ export type IDatabaseUpdateOptions<T = any> = Pick<
 >;
 
 export type IDatabaseDeleteOptions<T = any> = IDatabaseUpdateOptions<T>;
-
-// Raw
-
-export type IDatabaseRawOptions<T = any> = Pick<IDatabaseOptions<T>, 'session'>;
 
 // find
 export interface IDatabaseFindAllOptions<T = any>
@@ -61,7 +57,10 @@ export type IDatabaseManyOptions<T = any> = Pick<
     'session' | 'join'
 >;
 
-export type IDatabaseCreateManyOptions<T = any> = IDatabaseRawOptions<T>;
+export type IDatabaseCreateManyOptions<T = any> = Pick<
+    IDatabaseOptions<T>,
+    'session'
+>;
 
 export type IDatabaseSoftDeleteManyOptions<T = any> = IDatabaseManyOptions<T>;
 

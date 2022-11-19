@@ -1,10 +1,7 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { DATABASE_CONNECTION_NAME } from 'src/common/database/constants/database.constant';
-import {
-    SettingEntity,
-    SettingSchema,
-} from 'src/common/setting/repository/entities/setting.entity';
+import { SettingEntity } from 'src/common/setting/repository/entities/setting.entity';
 import { SettingRepository } from 'src/common/setting/repository/repositories/setting.repository';
 
 @Module({
@@ -12,15 +9,7 @@ import { SettingRepository } from 'src/common/setting/repository/repositories/se
     exports: [SettingRepository],
     controllers: [],
     imports: [
-        MongooseModule.forFeature(
-            [
-                {
-                    name: SettingEntity.name,
-                    schema: SettingSchema,
-                },
-            ],
-            DATABASE_CONNECTION_NAME
-        ),
+        TypeOrmModule.forFeature([SettingEntity], DATABASE_CONNECTION_NAME),
     ],
 })
 export class SettingRepositoryModule {}

@@ -3,7 +3,6 @@ import AuthConfig from './auth.config';
 import DatabaseConfig from './database.config';
 import HelperConfig from './helper.config';
 import AwsConfig from './aws.config';
-import UserConfig from './user.config';
 import FileConfig from './file.config';
 import MiddlewareConfig from './middleware.config';
 import RequestConfig from './request.config';
@@ -16,7 +15,6 @@ export default [
     DatabaseConfig,
     HelperConfig,
     AwsConfig,
-    UserConfig,
     MiddlewareConfig,
     RequestConfig,
     FileConfig,

@@ -1,9 +1,9 @@
 version: '3.8'
 services:
-  service:
+  ackService:
     build: .
-    container_name: ack
-    hostname: ack
+    container_name: ackService
+    hostname: ackService
     ports:
       - 3000:3000
     networks:
@@ -14,18 +14,19 @@ services:
     restart: unless-stopped
     depends_on: 
       - mongodb
-  mongodb:
-    image: mongo:latest
-    container_name: mongo
-    hostname: mongo
+  ackDatabase:
+    image: postgres:latest
+    container_name: ackDatabase
+    hostname: ackDatabase
     ports:
-      - 27017:27017
+      - 5432:5432
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: 123456
-      MONGO_INITDB_DATABASE: ack
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ack
+      PGDATA: /data/postgres
     volumes:
-      - dbdata:/data/db
+      - dbdata:/data/postgres
     restart: unless-stopped
     networks:
       - app-network

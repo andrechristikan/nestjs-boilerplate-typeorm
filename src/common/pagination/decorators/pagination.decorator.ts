@@ -1,7 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { Expose, Transform, Type } from 'class-transformer';
 import { IsOptional, ValidateIf } from 'class-validator';
-import { Types } from 'mongoose';
 import {
     PAGINATION_AVAILABLE_SORT,
     PAGINATION_MAX_PAGE,
@@ -18,6 +17,7 @@ import {
     IPaginationFilterDateOptions,
     IPaginationFilterStringOptions,
 } from 'src/common/pagination/interfaces/pagination.interface';
+import { ILike, In } from 'typeorm';
 
 export function PaginationSearch(availableSearch: string[]): PropertyDecorator {
     return applyDecorators(
@@ -29,14 +29,12 @@ export function PaginationSearch(availableSearch: string[]): PropertyDecorator {
                 return undefined;
             }
 
-            return {
-                $or: availableSearch.map((val) => ({
-                    [val]: {
-                        $regex: new RegExp(value),
-                        $options: 'i',
-                    },
-                })),
-            };
+            const data: Record<string, any> = {};
+            availableSearch.forEach((val) => {
+                data[val] = ILike(`%${value}%`);
+            });
+
+            return data;
         })
     );
 }
@@ -97,8 +95,7 @@ export function PaginationSort(
                 ? field
                 : bSort;
 
-            const convertType =
-                type.toUpperCase() === ENUM_PAGINATION_SORT_TYPE.DESC ? -1 : 1;
+            const convertType = ENUM_PAGINATION_SORT_TYPE[type.toUpperCase()];
 
             return { [convertField]: convertType };
         })
@@ -122,15 +119,17 @@ export function PaginationFilterBoolean(
         Transform(({ value, key }) => {
             return value
                 ? {
-                      [key]: {
-                          $in: value
+                      [key]: In(
+                          value
                               .split(',')
                               .map((val: string) =>
                                   val === 'true' ? true : false
-                              ),
-                      },
+                              )
+                      ),
                   }
-                : { [key]: { $in: defaultValue } };
+                : {
+                      [key]: In(defaultValue),
+                  };
         })
     );
 }
@@ -144,13 +143,14 @@ export function PaginationFilterEnum<T>(
         Transform(({ value, key }) => {
             return value
                 ? {
-                      [key]: {
-                          $in: value
+                      [key]: In(
+                          value
                               .split(',')
-                              .map((val: string) => defaultEnum[val]),
-                      },
+                              .map((val: string) => defaultEnum[val])
+                              .filter((val: string) => val !== undefined)
+                      ),
                   }
-                : { [key]: { $in: defaultValue } };
+                : { [key]: In(defaultValue) };
         })
     );
 }
@@ -159,7 +159,7 @@ export function PaginationFilterId(): PropertyDecorator {
     return applyDecorators(
         Expose(),
         Transform(({ value, key }) => {
-            return value ? { [key]: new Types.ObjectId(value) } : undefined;
+            return value ? { [key]: value } : undefined;
         })
     );
 }

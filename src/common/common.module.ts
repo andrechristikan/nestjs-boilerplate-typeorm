@@ -16,10 +16,10 @@ import configs from 'src/configs';
 import { AppLanguage } from 'src/app/constants/app.constant';
 import { SettingModule } from 'src/common/setting/setting.module';
 import { ApiKeyModule } from 'src/common/api-key/api-key.module';
-import { MongooseModule } from '@nestjs/mongoose';
 import { DatabaseOptionsService } from 'src/common/database/services/database.options.service';
 import { DatabaseOptionsModule } from 'src/common/database/database.options.module';
 import { DATABASE_CONNECTION_NAME } from 'src/common/database/constants/database.constant';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
     controllers: [],
@@ -142,10 +142,10 @@ import { DATABASE_CONNECTION_NAME } from 'src/common/database/constants/database
                 abortEarly: true,
             },
         }),
-        MongooseModule.forRootAsync({
-            connectionName: DATABASE_CONNECTION_NAME,
-            imports: [DatabaseOptionsModule],
+        TypeOrmModule.forRootAsync({
+            name: DATABASE_CONNECTION_NAME,
             inject: [DatabaseOptionsService],
+            imports: [DatabaseOptionsModule],
             useFactory: (databaseOptionsService: DatabaseOptionsService) =>
                 databaseOptionsService.createOptions(),
         }),

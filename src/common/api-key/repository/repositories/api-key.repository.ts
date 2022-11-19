@@ -1,18 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
 import { ApiKeyEntity } from 'src/common/api-key/repository/entities/api-key.entity';
-import { DatabaseMongoRepositoryAbstract } from 'src/common/database/abstracts/database.mongo-repository.abstract';
+import { DatabasePostgresRepositoryAbstract } from 'src/common/database/abstracts/database.postgres-repository.abstract';
 import { DatabaseModel } from 'src/common/database/decorators/database.decorator';
 import { IDatabaseRepository } from 'src/common/database/interfaces/database.repository.interface';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ApiKeyRepository
-    extends DatabaseMongoRepositoryAbstract<ApiKeyEntity>
+    extends DatabasePostgresRepositoryAbstract<ApiKeyEntity>
     implements IDatabaseRepository<ApiKeyEntity>
 {
     constructor(
         @DatabaseModel(ApiKeyEntity)
-        private readonly apiKeyModel: Model<ApiKeyEntity>
+        private readonly apiKeyModel: Repository<ApiKeyEntity>
     ) {
         super(apiKeyModel);
     }

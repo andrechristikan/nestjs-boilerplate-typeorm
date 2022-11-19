@@ -1,78 +1,63 @@
-import { Prop, SchemaFactory } from '@nestjs/mongoose';
-import { CallbackWithoutResultAndOptionalError } from 'mongoose';
-
-import { DatabaseMongoEntityAbstract } from 'src/common/database/abstracts/database.mongo-entity.abstract';
+import { DatabasePostgresEntityAbstract } from 'src/common/database/abstracts/database.postgres-entity.abstract';
 import { DatabaseEntity } from 'src/common/database/decorators/database.decorator';
+import { BeforeInsert, BeforeUpdate, Column } from 'typeorm';
 
 export const ApiKeyDatabaseName = 'apikeys';
 
-@DatabaseEntity({ collection: ApiKeyDatabaseName })
-export class ApiKeyEntity extends DatabaseMongoEntityAbstract {
-    @Prop({
-        required: true,
-        index: true,
+@DatabaseEntity({ name: ApiKeyDatabaseName })
+export class ApiKeyEntity extends DatabasePostgresEntityAbstract {
+    @Column({
+        nullable: false,
         type: String,
-        minlength: 1,
-        maxlength: 100,
-        lowercase: true,
-        trim: true,
+        length: 100,
     })
     name: string;
 
-    @Prop({
-        required: false,
+    @Column({
+        nullable: true,
         type: String,
-        minlength: 1,
-        maxlength: 255,
+        length: 255,
     })
     description?: string;
 
-    @Prop({
-        required: true,
+    @Column({
+        nullable: false,
         type: String,
         unique: true,
-        index: true,
-        trim: true,
     })
     key: string;
 
-    @Prop({
-        required: true,
-        trim: true,
+    @Column({
+        nullable: false,
         type: String,
     })
     hash: string;
 
-    @Prop({
-        required: true,
+    @Column({
+        nullable: false,
         type: String,
-        index: true,
-        trim: true,
     })
     encryptionKey: string;
 
-    @Prop({
-        required: true,
+    @Column({
+        nullable: false,
         type: String,
-        trim: true,
     })
     passphrase: string;
 
-    @Prop({
-        required: true,
-        index: true,
+    @Column({
+        nullable: false,
         type: Boolean,
     })
     isActive: boolean;
-}
 
-export const ApiKeySchema = SchemaFactory.createForClass(ApiKeyEntity);
-
-ApiKeySchema.pre(
-    'save',
-    function (next: CallbackWithoutResultAndOptionalError) {
-        this.name = this.name.toLowerCase();
-
-        next();
+    @BeforeInsert()
+    @BeforeUpdate()
+    beforeSave() {
+        this.name = this.name.toLowerCase().trim();
+        this.key = this.key.trim();
+        this.hash = this.hash.trim();
+        this.encryptionKey = this.encryptionKey.trim();
+        this.passphrase = this.passphrase.trim();
     }
-);
+}

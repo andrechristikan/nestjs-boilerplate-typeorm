@@ -4,10 +4,7 @@ import { Test } from '@nestjs/testing';
 import request from 'supertest';
 import { faker } from '@faker-js/faker';
 import { useContainer } from 'class-validator';
-import {
-    E2E_ENUM_ROLE_ACCESS_FOR_URL,
-    E2E_ENUM_MESSAGE_LANGUAGE_URL,
-} from './enum.constant';
+import { E2E_ENUM_MESSAGE_LANGUAGE_URL } from './enum.constant';
 import { HelperDateService } from 'src/common/helper/services/helper.date.service';
 import { CommonModule } from 'src/common/common.module';
 import { RoutesEnumModule } from 'src/router/routes/routes.enum.module';
@@ -55,17 +52,6 @@ describe('E2E Enum', () => {
         xApiKey = `${apiKey}:${apiEncryption}`;
 
         await app.init();
-    });
-
-    it(`GET ${E2E_ENUM_ROLE_ACCESS_FOR_URL} Success`, async () => {
-        const response = await request(app.getHttpServer())
-            .get(E2E_ENUM_ROLE_ACCESS_FOR_URL)
-            .set('user-agent', faker.internet.userAgent())
-            .set('x-timestamp', timestamp.toString())
-            .set('x-api-key', xApiKey);
-
-        expect(response.status).toEqual(HttpStatus.OK);
-        expect(response.body.statusCode).toEqual(HttpStatus.OK);
     });
 
     it(`GET ${E2E_ENUM_MESSAGE_LANGUAGE_URL} Success`, async () => {

@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { MongooseModuleOptions } from '@nestjs/mongoose';
-import mongoose from 'mongoose';
 import { ConfigService } from '@nestjs/config';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { IDatabaseOptionsService } from 'src/common/database/interfaces/database.options-service.interface';
 
 @Injectable()
@@ -27,33 +26,33 @@ export class DatabaseOptionsService implements IDatabaseOptionsService {
             : '';
     }
 
-    createOptions(): MongooseModuleOptions {
+    createOptions(): TypeOrmModuleOptions {
         let uri = `${this.host}`;
 
         if (this.database) {
             uri = `${uri}/${this.database}${this.options}`;
         }
 
-        if (this.env !== 'production') {
-            mongoose.set('debug', this.debug);
-        }
-
-        const mongooseOptions: MongooseModuleOptions = {
-            uri,
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            serverSelectionTimeoutMS: 5000,
-            autoCreate: true,
-            // useMongoClient: true,
+        const typeormOptions: Record<string, any> = {
+            type: 'postgres',
+            url: uri,
+            retryDelay: 5000,
+            logging:
+                this.env === 'production' ? false : this.debug ? true : false,
+            keepConnectionAlive: this.env === 'production' ? true : false,
+            synchronize: this.env === 'production' ? false : true,
+            entities: [
+                __dirname +
+                    '/../../{common,modules}/**/**/repository/entities/*.entity{.ts,.js}',
+            ],
+            autoLoadEntities: true,
         };
 
         if (this.user && this.password) {
-            mongooseOptions.auth = {
-                username: this.user,
-                password: this.password,
-            };
+            typeormOptions.username = this.user;
+            typeormOptions.password = this.password;
         }
 
-        return mongooseOptions;
+        return typeormOptions;
     }
 }

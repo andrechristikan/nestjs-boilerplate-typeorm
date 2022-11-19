@@ -5,7 +5,6 @@ import { ConfigModule } from '@nestjs/config';
 import configs from 'src/configs';
 import { ApiKeyService } from 'src/common/api-key/services/api-key.service';
 import { ApiKeyBulkKeyService } from 'src/common/api-key/services/api-key.bulk.service';
-import { MongooseModule } from '@nestjs/mongoose';
 import { DATABASE_CONNECTION_NAME } from 'src/common/database/constants/database.constant';
 import { DatabaseOptionsModule } from 'src/common/database/database.options.module';
 import { DatabaseOptionsService } from 'src/common/database/services/database.options.service';
@@ -16,6 +15,7 @@ import {
 import { ApiKeyModule } from 'src/common/api-key/api-key.module';
 import { ApiKeyEntity } from 'src/common/api-key/repository/entities/api-key.entity';
 import { ENUM_PAGINATION_SORT_TYPE } from 'src/common/pagination/constants/pagination.enum.constant';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 describe('ApiKeyService', () => {
     let apiKeyService: ApiKeyService;
@@ -27,10 +27,10 @@ describe('ApiKeyService', () => {
     beforeEach(async () => {
         const moduleRef = await Test.createTestingModule({
             imports: [
-                MongooseModule.forRootAsync({
-                    connectionName: DATABASE_CONNECTION_NAME,
-                    imports: [DatabaseOptionsModule],
+                TypeOrmModule.forRootAsync({
+                    name: DATABASE_CONNECTION_NAME,
                     inject: [DatabaseOptionsService],
+                    imports: [DatabaseOptionsModule],
                     useFactory: (
                         databaseOptionsService: DatabaseOptionsService
                     ) => databaseOptionsService.createOptions(),

@@ -6,20 +6,11 @@ import { AwsModule } from 'src/common/aws/aws.module';
 import { SettingController } from 'src/common/setting/controllers/setting.controller';
 import { HealthController } from 'src/health/controllers/health.controller';
 import { HealthModule } from 'src/health/health.module';
-import { UserController } from 'src/modules/user/controllers/user.controller';
-import { UserModule } from 'src/modules/user/user.module';
 
 @Module({
-    controllers: [HealthController, SettingController, UserController],
+    controllers: [HealthController, SettingController],
     providers: [],
     exports: [],
-    imports: [
-        AwsModule,
-        HealthModule,
-        TerminusModule,
-        HttpModule,
-        UserModule,
-        AuthModule,
-    ],
+    imports: [AwsModule, HealthModule, TerminusModule, HttpModule, AuthModule],
 })
 export class RoutesModule {}

@@ -5,15 +5,15 @@ import {
     HealthCheck,
     HealthCheckService,
     MemoryHealthIndicator,
-    MongooseHealthIndicator,
+    TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
-import { Connection } from 'mongoose';
 import { DatabaseConnection } from 'src/common/database/decorators/database.decorator';
 import { Response } from 'src/common/response/decorators/response.decorator';
 import { IResponse } from 'src/common/response/interfaces/response.interface';
 import { HealthCheckDoc } from 'src/health/docs/health.doc';
 import { HealthAwsIndicator } from 'src/health/indicators/health.aws.indicator';
 import { HealthSerialization } from 'src/health/serializations/health.serialization';
+import { DataSource } from 'typeorm';
 
 @ApiTags('health')
 @Controller({
@@ -22,11 +22,11 @@ import { HealthSerialization } from 'src/health/serializations/health.serializat
 })
 export class HealthController {
     constructor(
-        @DatabaseConnection() private readonly databaseConnection: Connection,
+        @DatabaseConnection() private readonly databaseConnection: DataSource,
         private readonly health: HealthCheckService,
         private readonly memoryHealthIndicator: MemoryHealthIndicator,
         private readonly diskHealthIndicator: DiskHealthIndicator,
-        private readonly mongooseIndicator: MongooseHealthIndicator,
+        private readonly typeormIndicator: TypeOrmHealthIndicator,
         private readonly awsIndicator: HealthAwsIndicator
     ) {}
 
@@ -45,9 +45,11 @@ export class HealthController {
     @HealthCheck()
     @Get('/database')
     async checkDatabase(): Promise<IResponse> {
+        console.log(this.databaseConnection);
+
         return this.health.check([
             () =>
-                this.mongooseIndicator.pingCheck('database', {
+                this.typeormIndicator.pingCheck('database', {
                     connection: this.databaseConnection,
                 }),
         ]);

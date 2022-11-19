@@ -5,12 +5,12 @@ import { ConfigModule } from '@nestjs/config';
 import { HelperModule } from 'src/common/helper/helper.module';
 import { ApiKeyBulkKeyService } from 'src/common/api-key/services/api-key.bulk.service';
 import { ApiKeyService } from 'src/common/api-key/services/api-key.service';
-import { MongooseModule } from '@nestjs/mongoose';
 import { DATABASE_CONNECTION_NAME } from 'src/common/database/constants/database.constant';
 import { DatabaseOptionsModule } from 'src/common/database/database.options.module';
 import { DatabaseOptionsService } from 'src/common/database/services/database.options.service';
 import { ApiKeyModule } from 'src/common/api-key/api-key.module';
 import { IApiKey } from 'src/common/api-key/interfaces/api-key.interface';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 describe('ApiKeyBulkService', () => {
     let apiKeyBulkService: ApiKeyBulkKeyService;
@@ -23,10 +23,10 @@ describe('ApiKeyBulkService', () => {
     beforeEach(async () => {
         const moduleRef = await Test.createTestingModule({
             imports: [
-                MongooseModule.forRootAsync({
-                    connectionName: DATABASE_CONNECTION_NAME,
-                    imports: [DatabaseOptionsModule],
+                TypeOrmModule.forRootAsync({
+                    name: DATABASE_CONNECTION_NAME,
                     inject: [DatabaseOptionsService],
+                    imports: [DatabaseOptionsModule],
                     useFactory: (
                         databaseOptionsService: DatabaseOptionsService
                     ) => databaseOptionsService.createOptions(),
