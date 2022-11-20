@@ -45,8 +45,6 @@ export class HealthController {
     @HealthCheck()
     @Get('/database')
     async checkDatabase(): Promise<IResponse> {
-        console.log(this.databaseConnection);
-
         return this.health.check([
             () =>
                 this.typeormIndicator.pingCheck('database', {

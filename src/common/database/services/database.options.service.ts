@@ -43,7 +43,7 @@ export class DatabaseOptionsService implements IDatabaseOptionsService {
             synchronize: this.env === 'production' ? false : true,
             entities: [
                 __dirname +
-                    '/../../{common,modules}/**/**/repository/entities/*.entity{.ts,.js}',
+                    '/../../../{common,modules}/**/**/repository/entities/*.entity{.ts,.js}',
             ],
             autoLoadEntities: true,
         };
