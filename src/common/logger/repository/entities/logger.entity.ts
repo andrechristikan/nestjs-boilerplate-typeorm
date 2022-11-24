@@ -1,6 +1,6 @@
 import { ApiKeyEntity } from 'src/common/api-key/repository/entities/api-key.entity';
 import { ENUM_AUTH_ACCESS_FOR } from 'src/common/auth/constants/auth.enum.constant';
-import { DatabasePostgresEntityAbstract } from 'src/common/database/abstracts/database.postgres-entity.abstract';
+import { DatabasePostgresEntityAbstract } from 'src/common/database/abstracts/postgres/entities/database.postgres-entity.abstract';
 import { DatabaseEntity } from 'src/common/database/decorators/database.decorator';
 import {
     ENUM_LOGGER_ACTION,

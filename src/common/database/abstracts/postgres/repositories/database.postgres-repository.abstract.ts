@@ -495,7 +495,7 @@ export abstract class DatabasePostgresRepositoryAbstract<T>
         }
     }
 
-    async deleteManyById(
+    async deleteManyByIds(
         _id: string[],
         options?: IDatabaseManyOptions<QueryRunner>
     ): Promise<boolean> {
@@ -555,7 +555,7 @@ export abstract class DatabasePostgresRepositoryAbstract<T>
         }
     }
 
-    async softDeleteManyById(
+    async softDeleteManyByIds(
         _id: string[],
         options?: IDatabaseSoftDeleteManyOptions<QueryRunner>
     ): Promise<boolean> {
@@ -617,7 +617,7 @@ export abstract class DatabasePostgresRepositoryAbstract<T>
         }
     }
 
-    async restoreManyById(
+    async restoreManyByIds(
         _id: string[],
         options?: IDatabaseRestoreManyOptions<QueryRunner>
     ): Promise<boolean> {

@@ -1,4 +1,4 @@
-import { DatabasePostgresEntityAbstract } from 'src/common/database/abstracts/database.postgres-entity.abstract';
+import { DatabasePostgresEntityAbstract } from 'src/common/database/abstracts/postgres/entities/database.postgres-entity.abstract';
 import { DatabaseEntity } from 'src/common/database/decorators/database.decorator';
 import { BeforeInsert, BeforeUpdate, Column } from 'typeorm';
 

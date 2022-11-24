@@ -1,4 +1,4 @@
-import { DatabasePostgresEntityAbstract } from 'src/common/database/abstracts/database.postgres-entity.abstract';
+import { DatabasePostgresEntityAbstract } from 'src/common/database/abstracts/postgres/entities/database.postgres-entity.abstract';
 import { DatabaseEntity } from 'src/common/database/decorators/database.decorator';
 import { ENUM_SETTING_DATA_TYPE } from 'src/common/setting/constants/setting.enum.constant';
 import { BeforeInsert, BeforeUpdate, Column } from 'typeorm';
